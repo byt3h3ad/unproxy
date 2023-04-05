@@ -8,3 +8,5 @@ cd unproxy
 pnpm install
 pnpm run dev
 ```
+
+Add your own `firebase-config.js`

@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'preact/hooks'
+import { db } from '../../firebase-config'
+import { onValue, ref } from 'firebase/database'
 import { QRCodeCanvas } from 'qrcode.react'
 
 const QrCode = () => {
