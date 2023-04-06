@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'preact/hooks'
 import { db } from '../../firebase-config'
-import { onValue, ref } from 'firebase/database'
+import { set, ref } from 'firebase/database'
 import { QRCodeCanvas } from 'qrcode.react'
 
 const QrCode = () => {
@@ -11,6 +11,10 @@ const QrCode = () => {
   // console.log(status)
   // console.log(date)
   const qrRef = useRef()
+
+  function writeData (url, value) {
+    set(ref(db, 'Course'))
+  }
 
   const refreshDate = () => {
     setDate(Date.now().toString())
