@@ -41,7 +41,7 @@ const QrCode = () => {
     />
   )
 
-  console.log(value)
+  // console.log(value)
 
   return (
     <div className="qrcode__container">
