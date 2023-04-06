@@ -38,14 +38,6 @@ const QrCode = () => {
       size={256}
       bgColor={'#EBECED'}
       level={'L'}
-      imageSettings={{
-        src: 'https://i.imgur.com/Q7N9UFs.png',
-        x: undefined,
-        y: undefined,
-        height: 48,
-        width: 48,
-        excavate: true
-      }}
     />
   )
 
