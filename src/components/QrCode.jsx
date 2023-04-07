@@ -6,11 +6,13 @@ import { QRCodeCanvas } from 'qrcode.react'
 const QrCode = () => {
   const [url, setUrl] = useState('')
   const [date, setDate] = useState('')
+  const [value, setValue] = useState('')
   const [status, setStatus] = useState(false)
 
-  // console.log(status)
-  // console.log(date)
   const qrRef = useRef()
+  if (status) {
+    setValue(() => url + date)
+  }
 
   const writeData = (url, value) => {
     if (status) {
@@ -22,26 +24,30 @@ const QrCode = () => {
     }
   }
 
-  const refreshDate = () => {
-    setDate(Date.now().toString())
+  const updateData = (url, value) => {
+    update(ref(db, `/${url}`), {
+      value
+    })
   }
 
-  if (status) {
-    useEffect(() => {
-      const timer = setInterval(refreshDate, 4000)
-      return () => {
-        clearInterval(timer)
-      }
-    }, [])
-  } else {
-    setDate('')
+  const refreshDate = () => {
+    setDate(Date.now().toString())
+    if (status) {
+      // console.log(status)
+      updateData(url, value)
+    }
   }
+
+  useEffect(() => {
+    const timer = setInterval(refreshDate, 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [value])
 
   const qrCodeEncoder = (e) => {
     setUrl(e.target.value)
   }
-
-  const value = url + date
 
   const qrcode = (
     <QRCodeCanvas
@@ -61,8 +67,6 @@ const QrCode = () => {
     />
   )
 
-  // console.log(value)
-
   return (
     <div className="qrcode__container">
       <div ref={qrRef}>{qrcode}</div>
@@ -81,6 +85,7 @@ const QrCode = () => {
             onClick={() => {
               setStatus(!status)
               writeData(url, value)
+              setValue(() => '')
             }}
           >
             {status ? 'Stop \u2000attendance' : 'Start attendance'}
