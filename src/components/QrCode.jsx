@@ -10,6 +10,7 @@ const QrCode = () => {
   const [status, setStatus] = useState(false)
 
   const qrRef = useRef()
+
   if (status) {
     setValue(() => url + date)
   }
