@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'preact/hooks'
-import { db } from '../../firebase-config'
-import { set, ref } from 'firebase/database'
+import { db } from '../../firebase'
+import { set, ref, update } from 'firebase/database'
 import { QRCodeCanvas } from 'qrcode.react'
 
 const QrCode = () => {
@@ -12,8 +12,14 @@ const QrCode = () => {
   // console.log(date)
   const qrRef = useRef()
 
-  function writeData (url, value) {
-    set(ref(db, 'Course'))
+  const writeData = (url, value) => {
+    if (status) {
+      set(ref(db, `/${url}`), {
+        value
+      })
+    } else {
+      // pass
+    }
   }
 
   const refreshDate = () => {
@@ -55,13 +61,13 @@ const QrCode = () => {
     />
   )
 
-  console.log(value)
+  // console.log(value)
 
   return (
     <div className="qrcode__container">
       <div ref={qrRef}>{qrcode}</div>
       <div className="input__group">
-        <form>
+        <form method='POST'>
           <label>Enter course name please.</label>
           <input
             type="text"
@@ -74,6 +80,7 @@ const QrCode = () => {
             disabled={!url}
             onClick={() => {
               setStatus(!status)
+              writeData(url, value)
             }}
           >
             {status ? 'Stop \u2000attendance' : 'Start attendance'}
