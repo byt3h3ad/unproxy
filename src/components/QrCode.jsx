@@ -10,6 +10,7 @@ const QrCode = () => {
   const [status, setStatus] = useState(false)
 
   const qrRef = useRef()
+
   if (status) {
     setValue(() => url + date)
   }
@@ -39,7 +40,7 @@ const QrCode = () => {
   }
 
   useEffect(() => {
-    const timer = setInterval(refreshDate, 1000)
+    const timer = setInterval(refreshDate, 4000)
     return () => {
       clearInterval(timer)
     }
