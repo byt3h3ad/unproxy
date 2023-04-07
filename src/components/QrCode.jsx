@@ -39,7 +39,7 @@ const QrCode = () => {
   }
 
   useEffect(() => {
-    const timer = setInterval(refreshDate, 1000)
+    const timer = setInterval(refreshDate, 4000)
     return () => {
       clearInterval(timer)
     }
