@@ -70,6 +70,7 @@ const QrCode = () => {
   return (
     <div className="qrcode__container">
       <div ref={qrRef}>{qrcode}</div>
+      {data}
       <div className="input__group">
         <form>
           <label>Enter course name please.</label>
