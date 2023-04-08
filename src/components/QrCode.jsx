@@ -6,13 +6,31 @@ import { QRCodeCanvas } from 'qrcode.react'
 const QrCode = () => {
   const [url, setUrl] = useState('')
   const [date, setDate] = useState('')
-  const [value, setValue] = useState('')
+  const [data, setData] = useState('')
   const [status, setStatus] = useState(false)
 
   const qrRef = useRef()
 
+  const qrCodeEncoder = (e) => {
+    setUrl(e.target.value)
+  }
+
+  const qrcode = (
+    <QRCodeCanvas
+      id="qrCode"
+      value={date}
+      size={256}
+      bgColor={'#EBECED'}
+      level={'L'}
+    />
+  )
+
   if (status) {
-    setValue(() => url + date)
+    setData(() => url + date)
+  }
+
+  if (!status) {
+    setDate(() => null)
   }
 
   const writeData = (url, value) => {
@@ -31,54 +49,43 @@ const QrCode = () => {
     })
   }
 
+  if (status) {
+    updateData(url, data)
+  }
+
   const refreshDate = () => {
     setDate(Date.now().toString())
-    if (status) {
-      // console.log(status)
-      updateData(url, value)
-    }
   }
 
   useEffect(() => {
-    const timer = setInterval(refreshDate, 10000)
+    let timer
+    if (status) {
+      timer = setInterval(refreshDate, 5000)
+    }
     return () => {
       clearInterval(timer)
     }
-  }, [value])
-
-  const qrCodeEncoder = (e) => {
-    setUrl(e.target.value)
-  }
-
-  const qrcode = (
-    <QRCodeCanvas
-      id="qrCode"
-      value={value}
-      size={256}
-      bgColor={'#EBECED'}
-      level={'L'}
-    />
-  )
+  }, [data])
 
   return (
     <div className="qrcode__container">
       <div ref={qrRef}>{qrcode}</div>
       <div className="input__group">
-        <form method='POST'>
+        <form>
           <label>Enter course name please.</label>
           <input
             type="text"
             value={url}
             onChange={qrCodeEncoder}
-            placeholder="CourseName"
+            placeholder="Course Name"
           />
           <button
             type="button"
             disabled={!url}
             onClick={() => {
               setStatus(!status)
-              writeData(url, value)
-              setValue(() => '')
+              writeData(url, data)
+              setData(() => '')
             }}
           >
             {status ? 'Stop \u2000attendance' : 'Start attendance'}
