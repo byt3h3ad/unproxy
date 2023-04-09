@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useState, useRef, useEffect } from 'preact/hooks'
 import { db } from '../../firebase'
 import { set, ref, update } from 'firebase/database'
