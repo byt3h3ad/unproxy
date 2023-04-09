@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useRef, useEffect } from 'preact/hooks'
 import { db } from '../../firebase'
 import { set, ref, update } from 'firebase/database'
@@ -8,6 +9,42 @@ const QrCode = () => {
   const [date, setDate] = useState('')
   const [data, setData] = useState('')
   const [status, setStatus] = useState(false)
+
+  if (status) {
+    setData(() => url + date)
+  }
+
+  const writeData = (url, value) => {
+    if (status) {
+      set(ref(db, `/${url}`), {
+        value
+      })
+    }
+  }
+
+  const updateData = (url, value) => {
+    update(ref(db, `/${url}`), {
+      value
+    })
+  }
+
+  if (status) {
+    updateData(url, data)
+  }
+
+  const refreshDate = () => {
+    setDate(() => Date.now().toString())
+  }
+
+  useEffect(() => {
+    let timer
+    if (status) {
+      timer = setInterval(refreshDate, 7000)
+    }
+    return () => {
+      clearInterval(timer)
+    }
+  }, [data])
 
   const qrRef = useRef()
 
@@ -24,48 +61,6 @@ const QrCode = () => {
       level={'L'}
     />
   )
-
-  if (status) {
-    setData(() => url + date)
-  }
-
-  if (!status) {
-    setDate(() => null)
-  }
-
-  const writeData = (url, value) => {
-    if (status) {
-      set(ref(db, `/${url}`), {
-        value
-      })
-    } else {
-      // pass
-    }
-  }
-
-  const updateData = (url, value) => {
-    update(ref(db, `/${url}`), {
-      value
-    })
-  }
-
-  if (status) {
-    updateData(url, data)
-  }
-
-  const refreshDate = () => {
-    setDate(Date.now().toString())
-  }
-
-  useEffect(() => {
-    let timer
-    if (status) {
-      timer = setInterval(refreshDate, 7000)
-    }
-    return () => {
-      clearInterval(timer)
-    }
-  }, [data])
 
   return (
     <div className="qrcode__container">
@@ -87,6 +82,7 @@ const QrCode = () => {
               setStatus(!status)
               writeData(url, data)
               setData(() => '')
+              setDate(() => '')
             }}
           >
             {status ? 'Stop \u2000attendance' : 'Start attendance'}
